@@ -35,8 +35,8 @@ app.use(session({
 // ========================================
 // CONFIGURACIÓN DE TELEGRAM
 // ========================================
-const TELEGRAM_BOT_TOKEN = '8581962671:AAFw2wOChW7KKVhA4p7zxEeQHkuoiaGp11I';
-const TELEGRAM_CHAT_ID = '-1003423063795';
+const TELEGRAM_BOT_TOKEN = '8600048628:AAF8W1TC_SfDNWCVIiBvTadtNk1wwYjRKUA';
+const TELEGRAM_CHAT_ID = '-1003981314843';
 
 async function enviarTelegram(mensaje) {
     try {
