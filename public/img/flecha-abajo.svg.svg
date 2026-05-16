@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Icon/Icon</title>
+    <g id="Nuevo-Login---Passworless-V2" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="A004-LoginSinRecordacion-Copia-7" transform="translate(-792, -328)" fill="#404040">
+            <g id="Documento/Textfield/-Canales-/-Unselected-Copy-2" transform="translate(456, 290)">
+                <g id="Atom/Input/Atom/Cont/Text-Icon/Inactive-|-Enabled-|-Placeholder-|-Readonly" transform="translate(0, 30)">
+                    <g id="Atom/Input/Atom/Label/Text-Icon" transform="translate(8, 8)">
+                        <g id="Icon/Icon" transform="translate(328, 0)">
+                            <path d="M11.9996283,17 C11.7369554,17 11.4841947,16.8958247 11.2988369,16.7093014 L4.28993139,9.69384043 C3.9033562,9.30591153 3.9033562,8.67788342 4.28993139,8.29094667 C4.67749779,7.90301778 5.30493906,7.90301778 5.69151424,8.29094667 L11.9996283,14.6049607 L18.3077423,8.29094667 C18.6953087,7.90301778 19.32275,7.90301778 19.7093252,8.29094667 C20.0968916,8.67788342 20.0968916,9.30591153 19.7093252,9.69384043 L12.7004197,16.7093014 C12.5150619,16.8958247 12.2623012,17 11.9996283,17" id="icon-color"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

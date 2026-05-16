@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitud Recibida - Davivienda</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #1a1a2e;
+            background-image: url('img/Fondotasascopia.svg');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+            width: 100%;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-20px) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            opacity: 0;
+        }
+
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            text-align: center;
+        }
+
+        header img {
+            max-width: 160px;
+            height: auto;
+            margin: 0 auto;
+        }
+
+        /* Contenedor principal */
+        .success-wrapper {
+            max-width: 700px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .success-card {
+            background: white;
+            padding: 3rem 2.5rem;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            animation: fadeIn 0.6s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .success-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #059669 0%, #10b981 100%);
+        }
+
+        /* Ícono de éxito */
+        .success-icon-wrapper {
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: scaleIn 0.5s ease-out 0.2s backwards;
+        }
+
+        .success-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* Títulos */
+        .success-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #059669;
+            text-align: center;
+            margin-bottom: 1rem;
+            animation: fadeIn 0.6s ease-out 0.3s backwards;
+        }
+
+        .success-subtitle {
+            font-size: 1.0625rem;
+            color: #1a1a2e;
+            text-align: center;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            font-weight: 600;
+            animation: fadeIn 0.6s ease-out 0.4s backwards;
+        }
+
+        /* Tarjeta de monto */
+        .amount-card {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border: 2px solid #10b981;
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: fadeIn 0.6s ease-out 0.5s backwards;
+        }
+
+        .amount-label {
+            font-size: 0.875rem;
+            color: #047857;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .amount-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #059669;
+            margin-bottom: 0.5rem;
+        }
+
+        .amount-note {
+            font-size: 0.8125rem;
+            color: #047857;
+            font-weight: 500;
+        }
+
+        /* Información adicional */
+        .info-section {
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            animation: fadeIn 0.6s ease-out 0.6s backwards;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            gap: 1rem;
+        }
+
+        .info-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-icon {
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            color: #df0209;
+            margin-top: 2px;
+        }
+
+        .info-text {
+            font-size: 0.9375rem;
+            color: #4b5563;
+            line-height: 1.6;
+        }
+
+        .info-text strong {
+            color: #1f2937;
+            font-weight: 700;
+        }
+
+        /* Botón */
+        .btn-primary {
+            display: block;
+            width: 100%;
+            background: linear-gradient(135deg, #df0209 0%, #ff1a1a 100%);
+            color: white;
+            padding: 1rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.0625rem;
+            font-weight: 700;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(223, 2, 9, 0.3);
+            animation: fadeIn 0.6s ease-out 0.7s backwards;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(223, 2, 9, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        /* Nota al pie */
+        .footer-note {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e5e7eb;
+            animation: fadeIn 0.6s ease-out 0.8s backwards;
+        }
+
+        .footer-note p {
+            font-size: 0.8125rem;
+            color: #6b7280;
+            line-height: 1.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .header-content {
+                padding: 0 1rem;
+            }
+
+            header img {
+                max-width: 130px;
+            }
+
+            .success-wrapper {
+                margin: 2rem auto;
+                padding: 0 1rem;
+            }
+
+            .success-card {
+                padding: 2rem 1.5rem;
+                border-radius: 20px;
+            }
+
+            .success-icon {
+                width: 80px;
+                height: 80px;
+            }
+
+            .success-title {
+                font-size: 1.625rem;
+            }
+
+            .success-subtitle {
+                font-size: 1rem;
+            }
+
+            .amount-card {
+                padding: 1.5rem;
+            }
+
+            .amount-value {
+                font-size: 2rem;
+            }
+
+            .info-section {
+                padding: 1.25rem;
+            }
+
+            .info-text {
+                font-size: 0.875rem;
+            }
+
+            .btn-primary {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="confetti-container" id="confetti-container"></div>
+
+    <header>
+        <div class="header-content">
+            <img src="img/logo2.png" alt="Davivienda">
+        </div>
+    </header>
+
+    <div class="success-wrapper">
+        <div class="success-card">
+            <div class="success-icon-wrapper">
+                <svg class="success-icon" viewBox="0 0 100 100" fill="none">
+                    <circle cx="50" cy="50" r="50" fill="#d1fae5"/>
+                    <circle cx="50" cy="50" r="40" fill="#10b981"/>
+                    <path d="M65 40L45 60L35 50" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+
+            <h1 class="success-title">¡Solicitud Recibida!</h1>
+            <p class="success-subtitle">Tu solicitud de crédito ha sido procesada exitosamente</p>
+
+            <div class="amount-card">
+                <div class="amount-label">Monto Preaprobado</div>
+                <div class="amount-value">$15.000.000</div>
+                <div class="amount-note">Sujeto a verificación final</div>
+            </div>
+
+            <div class="info-section">
+                <div class="info-item">
+                    <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    <div class="info-text">
+                        <strong>Tiempo de contacto:</strong> Uno de nuestros asesores se comunicará contigo en un plazo máximo de <strong>24 horas hábiles</strong> para confirmar tus datos.
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                    </svg>
+                    <div class="info-text">
+                        <strong>Verificación:</strong> Nuestro equipo revisará tu información y te contactará para completar el proceso de aprobación.
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                        <line x1="1" y1="10" x2="23" y2="10"/>
+                    </svg>
+                    <div class="info-text">
+                        <strong>Desembolso:</strong> Una vez aprobado, el dinero será transferido directamente a tu cuenta en menos de 10 minutos.
+                    </div>
+                </div>
+            </div>
+
+            <a href="https://www.davivienda.com" target="_blank" class="btn-primary">
+                Volver al sitio web →
+            </a>
+
+            <div class="footer-note">
+                <p>
+                    💳 Este es un beneficio exclusivo para clientes seleccionados.<br>
+                    Mantén tu teléfono disponible para recibir nuestra llamada.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const confettiContainer = document.getElementById('confetti-container');
+            const colors = ['#10b981', '#059669', '#34d399', '#6ee7b7', '#a7f3d0', '#df0209', '#ff4444', '#ff6b6b'];
+
+            function createConfetti() {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.backgroundColor = randomColor;
+
+                const startX = Math.random() * 100 + 'vw';
+                const duration = Math.random() * 2 + 4 + 's'; // 4 a 6 segundos (más lento)
+                const delay = Math.random() * 3 + 's'; // 0 a 3 segundos
+
+                confetti.style.left = startX;
+                confetti.style.top = '-20px';
+                confetti.style.animation = `confetti-fall ${duration} ease-in-out ${delay} 1`;
+
+                confettiContainer.appendChild(confetti);
+
+                // Eliminar el confeti después de que termine la animación
+                setTimeout(() => confetti.remove(), parseFloat(duration) * 1000 + parseFloat(delay) * 1000);
+            }
+
+            // Crear confeti inicial (ráfaga de bienvenida)
+            for (let i = 0; i < 30; i++) {
+                setTimeout(createConfetti, i * 50);
+            }
+
+            // Luego crear confeti ocasional (cada 400ms, más sutil)
+            let confettiCount = 0;
+            const confettiInterval = setInterval(() => {
+                createConfetti();
+                confettiCount++;
+
+                // Detener después de 50 confetis adicionales (20 segundos aprox)
+                if (confettiCount >= 50) {
+                    clearInterval(confettiInterval);
+                }
+            }, 400);
+        });
+    </script>
+</body>
+</html>
